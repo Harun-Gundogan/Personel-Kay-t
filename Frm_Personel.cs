@@ -19,7 +19,8 @@ namespace Personel_Kayıt
         }
 
         SqlConnection baglanti = new SqlConnection("Data Source=HARUN\\SQLEXPRESS;Initial Catalog=PersonelProje;Integrated Security=True;");
-        
+
+        string durum = "";
         void temizle()
         {
             txt_Id.Text = "";
@@ -75,7 +76,7 @@ namespace Personel_Kayıt
                     komut.Parameters.AddWithValue("@p2", txt_Soyad.Text);
                     komut.Parameters.AddWithValue("@p3", cmb_Sehir.Text);
                     komut.Parameters.AddWithValue("@p4", mtxt_Maas.Text);
-                    komut.Parameters.AddWithValue("@p5", lbl_Rd.Text);
+                    komut.Parameters.AddWithValue("@p5", durum);
                     komut.Parameters.AddWithValue("@p6", txt_Meslek.Text);
                     komut.ExecuteNonQuery();
                     baglanti.Close();
@@ -86,37 +87,13 @@ namespace Personel_Kayıt
                 catch (Exception)
                 {
 
-                    MessageBox.Show("Program bir hata ile karşılaştı. Lütfen IT ekibine haber veriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Bir Hata Oluştu", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                
             }
            
         }
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int secilen = dataGridView1.SelectedCells[0].RowIndex;
-
-            txt_Id.Text = dataGridView1.Rows[secilen].Cells[0].Value.ToString();
-            txt_Ad.Text = dataGridView1.Rows[secilen].Cells[1].Value.ToString();
-            txt_Soyad.Text = dataGridView1.Rows[secilen].Cells[2].Value.ToString();
-            cmb_Sehir.Text = dataGridView1.Rows[secilen].Cells[3].Value.ToString();
-            mtxt_Maas.Text = dataGridView1.Rows[secilen].Cells[4].Value.ToString();
-            lbl_Rd.Text = dataGridView1.Rows[secilen].Cells[5].Value.ToString();
-            txt_Meslek.Text = dataGridView1.Rows[secilen].Cells[6].Value.ToString();
-        }
-
-        private void lbl_Rd_TextChanged(object sender, EventArgs e)
-        {
-            if (lbl_Rd.Text == "True")
-            {
-                rd_Kadin.Checked = true;
-            }
-            if(lbl_Rd.Text == "False")
-            {
-                rd_Erkek.Checked = true;
-            }
-        }
-
+       
         private void btn_Guncelle_Click(object sender, EventArgs e)
         {
             try
@@ -127,7 +104,7 @@ namespace Personel_Kayıt
                 komut.Parameters.AddWithValue("@p2", txt_Soyad.Text);
                 komut.Parameters.AddWithValue("@p3", cmb_Sehir.Text);
                 komut.Parameters.AddWithValue("@p4", mtxt_Maas.Text);
-                komut.Parameters.AddWithValue("@p5", lbl_Rd.Text);
+                komut.Parameters.AddWithValue("@p5", durum);
                 komut.Parameters.AddWithValue("@p6", txt_Meslek.Text);
                 komut.Parameters.AddWithValue("@p7", txt_Id.Text);
                 komut.ExecuteNonQuery();
@@ -139,7 +116,7 @@ namespace Personel_Kayıt
             catch (Exception)
             {
 
-                MessageBox.Show("Program bir hata ile karşılaştı. Lütfen IT ekibine haber veriniz.", "Uyarı", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Bir Hata Oluştu", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }
@@ -164,19 +141,45 @@ namespace Personel_Kayıt
 
         private void rd_Evli_CheckedChanged(object sender, EventArgs e)
         {
-           
-            lbl_Rd.TextChanged -= lbl_Rd_TextChanged;
-            lbl_Rd.Text = "True";
-            lbl_Rd.TextChanged += lbl_Rd_TextChanged;
+
+            durum = "0";
+
         }
 
         private void rd_Bekar_CheckedChanged(object sender, EventArgs e)
         {
-           
-            lbl_Rd.TextChanged -= lbl_Rd_TextChanged;
-            lbl_Rd.Text = "False";
-            lbl_Rd.TextChanged += lbl_Rd_TextChanged;
+
+            durum = "1";
+
         }
-                
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            int secilen = dataGridView1.SelectedCells[0].RowIndex;
+
+            txt_Id.Text = dataGridView1.Rows[secilen].Cells[0].Value.ToString();
+            txt_Ad.Text = dataGridView1.Rows[secilen].Cells[1].Value.ToString();
+            txt_Soyad.Text = dataGridView1.Rows[secilen].Cells[2].Value.ToString();
+            cmb_Sehir.Text = dataGridView1.Rows[secilen].Cells[3].Value.ToString();
+            mtxt_Maas.Text = dataGridView1.Rows[secilen].Cells[4].Value.ToString();
+            if (dataGridView1.Rows[secilen].Cells[5].Value.ToString() == "True")
+            {
+                rd_Kadin.Checked = true;
+            }
+            else
+            {
+                rd_Erkek.Checked = true;
+            }
+
+            txt_Meslek.Text = dataGridView1.Rows[secilen].Cells[6].Value.ToString();
+        }
+
+        private void btn_Temizle_Click(object sender, EventArgs e)
+        {
+            temizle();
+        }
+
+       
     }
 }
